@@ -12,7 +12,6 @@ public class Banco {
         Scanner scanner = new Scanner(System.in);
         String negrita = "\u001B[1m";
         String reset = "\u001B[0m";
-        String morado = "\u001B[35m";
         String verde = "\u001B[92m";
         String oro = "\u001B[33m";
         String azul = "\u001B[34m";
