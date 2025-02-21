@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Scanner;
 
 
@@ -52,7 +53,7 @@ public class Banco {
 
 
     //METODOS PARA LA OPTIMIZACION DEL CODIGO
-        public static String leerTextoValido(Scanner scanner, String mensaje) {
+        public static String leerTextoValido(Scanner scanner, String mensaje) throws Exception {
             String texto;
             String reset = "\u001B[0m";
             String negrita = "\u001B[1m";
@@ -63,12 +64,12 @@ public class Banco {
                 if (!texto.isEmpty()) {
                     break;
                 } else {
-                    System.out.println(rojo+negrita+"Dato inválido. Por favor, ingrese un valor."+reset);
+                    throw new Exception(texto+"sdsdsdsdsdsd");
                 }
             }
             return texto;
         }
-        public static int leerEnteroValido(Scanner scanner, String mensaje) {
+        public static int leerEnteroValido(Scanner scanner, String mensaje)  throws Exception{
             String reset = "\u001B[0m";
             String negrita = "\u001B[1m";
             String rojo = "\u001B[31m";
@@ -77,7 +78,7 @@ public class Banco {
                     System.out.print(mensaje);
                     return Integer.parseInt(scanner.nextLine());
                 } catch (NumberFormatException e) {
-                    System.out.println(rojo+negrita+"Dato inválido. Por favor, ingrese un número entero."+reset);
+                    throw new Exception(rojo+negrita+"Dato inválido. Por favor, ingrese un número entero."+reset);
                 }
             }
         }
@@ -90,7 +91,7 @@ public class Banco {
         }
 
     //METODO actualizarUsuario
-        public void actualizarUsuario(ArrayList<Usuario> usuarios){
+        public void actualizarUsuario(ArrayList<Usuario> usuarios) throws Exception{
             if (usuarios.isEmpty()) {
                 System.out.println(rojo+negrita+"No hay usuarios registrados."+reset);
                 return;
@@ -109,10 +110,10 @@ public class Banco {
 
             System.out.println(azul+negrita+"\nOpciones de gestión:"+reset);
             System.out.println(azul+negrita+"1."+reset+oro+ "Cambiar nombre"+reset);
-            System.out.println(oro+negrita+"2."+reset+oro+ "Cambiar direccion"+reset);
-            System.out.println(oro+negrita+"3."+reset+oro+ "Cambiar numero de identificacion"+reset);
-            System.out.println(oro+negrita+"4."+reset+oro+ "Cambiar correo"+reset);
-            System.out.println(oro+negrita+"5."+reset+oro+ "Cambiar contraseña"+reset);
+            System.out.println(azul+negrita+"2."+reset+oro+ "Cambiar direccion"+reset);
+            System.out.println(azul+negrita+"3."+reset+oro+ "Cambiar numero de identificacion"+reset);
+            System.out.println(azul+negrita+"4."+reset+oro+ "Cambiar correo"+reset);
+            System.out.println(azul+negrita+"5."+reset+oro+ "Cambiar contraseña"+reset);
             System.out.print(azul+negrita+"Seleccione una opción: "+reset);
             int opcion = scanner.nextInt();
             scanner.nextLine();
@@ -148,7 +149,7 @@ public class Banco {
 
 
     //METODO eliminarUsuario
-        public void eliminarUsuario(ArrayList<Usuario> usuarios){
+        public void eliminarUsuario(ArrayList<Usuario> usuarios) throws Exception{
             if (usuarios.isEmpty()) {
                 System.out.println(rojo+negrita+"No hay usuarios registrados."+reset);
                 return;
@@ -169,6 +170,7 @@ public class Banco {
         }
 
 
+
     //TOSTRING
         @Override
         public String toString() {
@@ -178,5 +180,37 @@ public class Banco {
                     "7:"+reset+oro+negrita+"Consultar saldo\n"+azul+negrita+"8:"+reset+oro+negrita+"Consultar transacciones\n"+azul+negrita+
                     "9:"+reset+oro+negrita+"Obtener porcentaje de gastos e ingresos de un usuario dado el mes\n"+azul+negrita+"10:"+reset+oro+negrita+"Salir\n";
         }
+
+    public void crearBilletera() throws Exception{
+        Billetera billeteraNueva = new Billetera("", 0, "");
+        String propietarioNuevo = Banco.leerTextoValido(scanner, azul+negrita+"Ingrese su nombre: "+reset);
+        String idPropietario = Banco.leerTextoValido(scanner, azul+negrita+"Ingrese su id: "+reset);
+        StringBuilder propietarioAsignado = new StringBuilder();
+        for(Usuario usuario : usuarios){
+            if(usuario.getNombre().equalsIgnoreCase(propietarioNuevo) && usuario.getId().equals(idPropietario)){
+                propietarioAsignado.append(usuario.getNombre());
+                break;
+            }else {
+                System.out.println(rojo + negrita + "Usuario/ID No encontrado en nuestra base de datos." + reset);
+                return;
+            }
+        }
+        billeteraNueva.setPropietario(propietarioAsignado.toString());
+        StringBuilder sb = new StringBuilder();
+        Random random = new Random();
+        for (int i = 0; i < 10; i++) {
+            sb.append(random.nextInt(10));
+        }
+        billeteraNueva.setNumTarjeta(sb.toString());
+
+        billeteras.add(billeteraNueva);
+
+        System.out.println(verde+negrita+"Billetera virtual creada con éxito!");
+        System.out.println(verde+negrita+"Propietario: "+billeteraNueva.getPropietario());
+        System.out.println(verde+negrita+"Numero de tarjeta: "+billeteraNueva.getNumTarjeta());
+        System.out.println(verde+negrita+"Saldo: "+billeteraNueva.getSaldo());
+    }
+
+
 }
 

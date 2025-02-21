@@ -1,38 +1,70 @@
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Transaccion {
-    private LocalDate fecha;
-    private String categoria;
-    private String usuarioDestinatario;
+    private LocalDateTime fecha;
+    private CATEGORIA categoria;
+    private Billetera destinatario;
+    private Billetera origen;
+    private float monto;
+    private String identificador;
+
 
 
 
     //CONSTRUCTOR
-    public Transaccion(LocalDate fecha, String categoria, String usuarioDestinatario) {
+    public Transaccion(LocalDateTime fecha, CATEGORIA categoria, Billetera destinatario, Billetera origen, float monto, String identificador) {
         this.fecha = fecha;
         this.categoria = categoria;
-        this.usuarioDestinatario = usuarioDestinatario;
+        this.destinatario = destinatario;
+        this.origen=origen;
+        this.monto=monto;
+        this.identificador=identificador;
     }
     //GETTERS Y SETTERS
-        public LocalDate getFecha() {
+        public LocalDateTime getFecha() {
             return fecha;
         }
-        public void setFecha(LocalDate fecha) {
+        public void setFecha(LocalDateTime fecha) {
             this.fecha = fecha;
         }
-        public String getCategoria() {
+        public CATEGORIA getCategoria() {
             return categoria;
         }
-        public void setCategoria(String categoria) {
+        public void setCategoria(CATEGORIA categoria) {
             this.categoria = categoria;
         }
-        public String getUsuarioDestinatario() {
-            return usuarioDestinatario;
+        public float getMonto() {
+            return monto;
+        }
+        public void setMonto(float monto) {
+            this.monto = monto;
+        }
+        public String getIdentificador() {
+            return identificador;
+        }
+        public void setIdentificador(String identificador) {
+            this.identificador = identificador;
+        }
+        public Billetera getDestinatario() {
+            return destinatario;
         }
 
-        public void setUsuarioDestinatario(String usuarioDestinatario) {
-            this.usuarioDestinatario = usuarioDestinatario;
+        public void setDestinatario(Billetera destinatario) {
+            this.destinatario = destinatario;
         }
+
+        public Billetera getOrigen() {
+            return origen;
+        }
+
+        public void setOrigen(Billetera origen) {
+            this.origen = origen;
+        }
+
 
     //
 }
+
+

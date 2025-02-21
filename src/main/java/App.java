@@ -21,7 +21,7 @@ public class App {
             String morado = "\u001B[35m";
 
         //INTERFAZ MENU PRINCIPAL DEL PROGRAMA
-            while(!salir && usermain == null){
+            while(!salir && usermain == null) {
                 System.out.print(banco.toString());
                 /*MENU DEL SISTEMA(TOSTRING)
                 1: Registrar Usuario
@@ -34,43 +34,43 @@ public class App {
                 8: Consultar transacciones
                 9: Obtener porcentaje de gastos e ingresos de un usuario dado el mes
                 10: Salir
+
                  */
 
-                int opcionMenuPrincipal = Banco.leerEnteroValido(scanner, azul+negrita+"Seleccione una opción: "+reset);
-                switch (opcionMenuPrincipal) {
-                    case 1:
-                        System.out.println(azul+negrita+"Has seleccionado registrar un usuario!"+reset);
-                        String nombre = Banco.leerTextoValido(scanner,azul+"Ingrese su nombre: "+reset);
-                        String direccion = Banco.leerTextoValido(scanner,azul+"Ingrese su dirección: "+reset);
-                        String id = Banco.leerTextoValido(scanner,azul+"Ingrese su número de identificación: "+reset);
-                        String correo = Banco.leerTextoValido(scanner,azul+"Ingrese su correo electrónico: "+reset);
-                        String contrasena = Banco.leerTextoValido(scanner,azul+"Ingrese su contraseña: "+reset);
-                        banco.registrarUsuario(nombre, direccion, id, correo, contrasena);
-                        break;
-
-                    case 2:
-                        banco.actualizarUsuario(banco.getUsuarios());
-                        break;
-
-                    case 3:
-                        banco.eliminarUsuario(banco.getUsuarios());
-                        break;
-
-                    case 4:
-                        billetera.crearBilletera();
-                        break;
-
-                    case 5:
+                try {
 
 
+                    int opcionMenuPrincipal = Banco.leerEnteroValido(scanner, azul + negrita + "Seleccione una opción: " + reset);
+                    switch (opcionMenuPrincipal) {
+                        case 1:
+                            System.out.println(azul + negrita + "Has seleccionado registrar un usuario!" + reset);
+                            String nombre = Banco.leerTextoValido(scanner, azul + "Ingrese su nombre: " + reset);
+                            String direccion = Banco.leerTextoValido(scanner, azul + "Ingrese su dirección: " + reset);
+                            String id = Banco.leerTextoValido(scanner, azul + "Ingrese su número de identificación: " + reset);
+                            String correo = Banco.leerTextoValido(scanner, azul + "Ingrese su correo electrónico: " + reset);
+                            String contrasena = Banco.leerTextoValido(scanner, azul + "Ingrese su contraseña: " + reset);
+                            banco.registrarUsuario(nombre, direccion, id, correo, contrasena);
+                            break;
+
+                        case 2:
+                            banco.actualizarUsuario(banco.getUsuarios());
+                            break;
+
+                        case 3:
+                            banco.eliminarUsuario(banco.getUsuarios());
+                            break;
+
+                        case 4:
+                            billetera.crearBilletera();
+                            break;
+
+                        case 5:
 
 
-
-
-
-
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
-            }
     }
 }
 
