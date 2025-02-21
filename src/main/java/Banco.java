@@ -20,6 +20,7 @@ public class Banco {
 
     //CONSTRUCTOR
         public Banco(String nombre) {
+            this.usuarios = new ArrayList<>();
             this.nombre = nombre;
         }
 
@@ -84,12 +85,6 @@ public class Banco {
         
     //METODO registrarUsuario
         public void registrarUsuario(String nombre, String direccion, String id, String correo, String contrasena){
-            Usuario usuario = new Usuario("", "", "", "", "");
-            nombre = leerTextoValido(scanner,azul+"Ingrese su nombre: "+reset);
-            direccion = leerTextoValido(scanner,azul+"Ingrese su dirección: "+reset);
-            id = leerTextoValido(scanner,azul+"Ingrese su número de identificación: "+reset);
-            correo = leerTextoValido(scanner,azul+"Ingrese su correo electrónico: "+reset);
-            contrasena = leerTextoValido(scanner,azul+"Ingrese su contraseña: "+reset);
             usuarios.add(new Usuario(nombre, direccion, id, correo, contrasena));
             System.out.println(negrita+verde+"Usuario registrado como "+reset+oro+negrita + nombre);
         }
@@ -177,11 +172,11 @@ public class Banco {
     //TOSTRING
         @Override
         public String toString() {
-            return "Banco{" +
-                    "nombre='" + nombre + '\'' +
-                    ", usuarios=" + usuarios +
-                    ", transacciones=" + transacciones +
-                    ", billeteras=" + billeteras +
-                    '}';
+            return azul+negrita+"Bienvenido al banco" + nombre + ", Seleccione el indice de la accion requerida\n"+azul+negrita+"1:"+reset+oro+negrita+"Registrar Usuario" + reset+azul+negrita+
+                    "\n2:"+reset+oro+negrita+"Actualizar datos de un usuario\n"+azul+negrita+"3:"+reset+oro+negrita+"Eliminar un usuario\n"+azul+negrita+"4:"+reset+oro+negrita+"Crear billetera virtual\n"+azul+negrita+
+                    "5:"+reset+oro+negrita+"Recargar billetera\n"+azul+negrita+"6:"+reset+oro+negrita+"Realizar transaccion\n"+reset+azul+negrita+
+                    "7:"+reset+oro+negrita+"Consultar saldo\n"+azul+negrita+"8:"+reset+oro+negrita+"Consultar transacciones\n"+azul+negrita+
+                    "9:"+reset+oro+negrita+"Obtener porcentaje de gastos e ingresos de un usuario dado el mes\n"+azul+negrita+"10:"+reset+oro+negrita+"Salir\n";
         }
 }
+

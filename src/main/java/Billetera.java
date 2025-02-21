@@ -7,7 +7,7 @@ public class Billetera {
     //INSTANCIAS NECESARIAS
         private String numTarjeta;
         private double saldo;
-        private Usuario propietario;
+        private String propietario;
         private ArrayList<Transaccion> transacciones;
         private ArrayList<Usuario> usuarios;
         Scanner scanner = new Scanner(System.in);
@@ -20,10 +20,11 @@ public class Billetera {
 
 
     //CONSTRUCTOR
-        public Billetera(String numTarjeta, double saldo, Usuario propietario) {
+        public Billetera(String numTarjeta, double saldo, String propietario) {
             this.numTarjeta = numTarjeta;
             this.saldo = saldo;
             this.propietario = propietario;
+            this.usuarios = new ArrayList<>();
             ArrayList<Transaccion> transacciones = new ArrayList<>();
             ArrayList<Usuario> usuarios = new ArrayList<>();
         }
@@ -53,37 +54,40 @@ public class Billetera {
         public void setUsuarios(ArrayList<Usuario> usuarios) {
             this.usuarios = usuarios;
         }
-        public Usuario getPropietario() {
+        public String getPropietario() {
             return propietario;
         }
-        public void setPropietario(Usuario propietario) {
+        public void setPropietario(String propietario) {
             this.propietario = propietario;
         }
 
     //METODO crearBilletera
         public void crearBilletera(){
-            Billetera billeteraNueva = new Billetera(numTarjeta, saldo, propietario);
-                numTarjeta = "";
-                saldo = 0;
-                propietario = null;
+            numTarjeta = "";
+            saldo = 0;
             String propietarioNuevo = Banco.leerTextoValido(scanner, azul+negrita+"Ingrese su nombre: "+reset);
             String idPropietario = Banco.leerTextoValido(scanner, azul+negrita+"Ingrese su id: "+reset);
+            StringBuilder propietarioAsignado = new StringBuilder();
             for(Usuario usuario : usuarios){
                 if(usuario.getNombre().equalsIgnoreCase(propietarioNuevo) && usuario.getId().equals(idPropietario)){
-                    propietario = usuario;
+                    propietarioAsignado.append(usuario.getNombre());
+                    break;
                 }else {
                     System.out.println(rojo + negrita + "Usuario/ID No encontrado en nuestra base de datos." + reset);
+                    return;
                 }
             }
+            propietario = propietarioAsignado.toString();
+            StringBuilder sb = new StringBuilder();
             Random random = new Random();
-            for(int i = 0; i<16; i++){
-                numTarjeta += random.nextInt(10);
+            for (int i = 0; i < 16; i++) {
+                sb.append(random.nextInt(10));
             }
+            numTarjeta = sb.toString();
+            Billetera billeteraNueva = new Billetera(numTarjeta, saldo, propietario);
             System.out.println(verde+negrita+"Billetera virtual creada con éxito!");
             System.out.println(verde+negrita+"Propietario: "+propietario);
             System.out.println(verde+negrita+"Numero de tarjeta: "+numTarjeta);
             System.out.println(verde+negrita+"Saldo: "+saldo);
-
-
         }
 }
