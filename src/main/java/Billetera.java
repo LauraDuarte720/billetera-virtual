@@ -105,5 +105,12 @@ public class Billetera {
         return transaccion;
     }
 
+    //METODO PARA AGREGAR LAS TRANSACCIONES A LA BILLETERA
+    public void agregarTransaccionABilletera(Transaccion... nuevasTransacciones){
+        for(Transaccion transaccion : nuevasTransacciones){
+            transacciones.add(transaccion);
+        }
+    }
+
 
 }
