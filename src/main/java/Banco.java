@@ -88,8 +88,8 @@ public class Banco {
     //METODO registrarUsuario
         public void registrarUsuario(String nombre, String direccion, String id, String correo, String contrasena) throws Exception{
             boolean idValido = false;
-            while (idValido) {
-                if (id.matches("//d+")) {
+            while (!idValido) {
+                if (!id.matches("//d+")) {
                     throw new Exception(rojo + negrita + "Ingrese un ID válido." + reset);
                 }else{
                     idValido = true;
