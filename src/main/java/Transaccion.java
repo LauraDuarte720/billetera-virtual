@@ -1,6 +1,7 @@
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class Transaccion {
     private LocalDateTime fecha;
@@ -8,13 +9,12 @@ public class Transaccion {
     private Billetera destinatario;
     private Billetera origen;
     private float monto;
-    private String identificador;
-
+    private UUID identificador;
 
 
 
     //CONSTRUCTOR
-    public Transaccion(LocalDateTime fecha, CATEGORIA categoria, Billetera destinatario, Billetera origen, float monto, String identificador) {
+    public Transaccion(LocalDateTime fecha, CATEGORIA categoria, Billetera destinatario, Billetera origen, float monto) {
         this.fecha = fecha;
         this.categoria = categoria;
         this.destinatario = destinatario;
@@ -41,10 +41,10 @@ public class Transaccion {
         public void setMonto(float monto) {
             this.monto = monto;
         }
-        public String getIdentificador() {
+        public UUID getIdentificador() {
             return identificador;
         }
-        public void setIdentificador(String identificador) {
+        public void setIdentificador(UUID identificador) {
             this.identificador = identificador;
         }
         public Billetera getDestinatario() {
