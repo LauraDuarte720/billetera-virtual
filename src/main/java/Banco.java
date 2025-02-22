@@ -23,6 +23,7 @@ public class Banco {
         public Banco(String nombre) {
             this.usuarios = new ArrayList<>();
             this.nombre = nombre;
+            this.billeteras = new ArrayList<>();
         }
 
     //GETTERS Y SETTERS
@@ -64,7 +65,7 @@ public class Banco {
                 if (!texto.isEmpty()) {
                     break;
                 } else {
-                    throw new Exception(texto+"sdsdsdsdsdsd");
+                    throw new Exception(rojo+negrita+"Dato inválido. Por favor, ingrese un número entero."+reset);
                 }
             }
             return texto;
@@ -85,7 +86,15 @@ public class Banco {
 
         
     //METODO registrarUsuario
-        public void registrarUsuario(String nombre, String direccion, String id, String correo, String contrasena){
+        public void registrarUsuario(String nombre, String direccion, String id, String correo, String contrasena) throws Exception{
+            boolean idValido = false;
+            while (idValido) {
+                if (id.matches("//d+")) {
+                    throw new Exception(rojo + negrita + "Ingrese un ID válido." + reset);
+                }else{
+                    idValido = true;
+                }
+            }
             usuarios.add(new Usuario(nombre, direccion, id, correo, contrasena));
             System.out.println(negrita+verde+"Usuario registrado como "+reset+oro+negrita + nombre);
         }
@@ -181,35 +190,37 @@ public class Banco {
                     "9:"+reset+oro+negrita+"Obtener porcentaje de gastos e ingresos de un usuario dado el mes\n"+azul+negrita+"10:"+reset+oro+negrita+"Salir\n";
         }
 
-    public void crearBilletera() throws Exception{
-        Billetera billeteraNueva = new Billetera("", 0, "");
-        String propietarioNuevo = Banco.leerTextoValido(scanner, azul+negrita+"Ingrese su nombre: "+reset);
-        String idPropietario = Banco.leerTextoValido(scanner, azul+negrita+"Ingrese su id: "+reset);
-        StringBuilder propietarioAsignado = new StringBuilder();
-        for(Usuario usuario : usuarios){
-            if(usuario.getNombre().equalsIgnoreCase(propietarioNuevo) && usuario.getId().equals(idPropietario)){
-                propietarioAsignado.append(usuario.getNombre());
-                break;
-            }else {
-                System.out.println(rojo + negrita + "Usuario/ID No encontrado en nuestra base de datos." + reset);
-                return;
+
+    //METODO crearBilletera
+        public void crearBilletera() throws Exception{
+            Billetera billeteraNueva = new Billetera("", 0, "");
+            String propietarioNuevo = Banco.leerTextoValido(scanner, azul+negrita+"Ingrese su nombre: "+reset);
+            String idPropietario = Banco.leerTextoValido(scanner, azul+negrita+"Ingrese su id: "+reset);
+            StringBuilder propietarioAsignado = new StringBuilder();
+            for(Usuario usuario : usuarios){
+                if(usuario.getNombre().equalsIgnoreCase(propietarioNuevo) && usuario.getId().equals(idPropietario)){
+                    propietarioAsignado.append(usuario.getNombre());
+                    break;
+                }else {
+                    System.out.println(rojo + negrita + "Usuario/ID No encontrado en nuestra base de datos." + reset);
+                    return;
+                }
             }
-        }
-        billeteraNueva.setPropietario(propietarioAsignado.toString());
-        StringBuilder sb = new StringBuilder();
-        Random random = new Random();
-        for (int i = 0; i < 10; i++) {
-            sb.append(random.nextInt(10));
-        }
-        billeteraNueva.setNumTarjeta(sb.toString());
+            billeteraNueva.setPropietario(propietarioAsignado.toString());
+            StringBuilder sb = new StringBuilder();
+            Random random = new Random();
+            for (int i = 0; i < 10; i++) {
+                sb.append(random.nextInt(10));
+            }
+            billeteraNueva.setNumTarjeta(sb.toString());
 
-        billeteras.add(billeteraNueva);
+            billeteras.add(billeteraNueva);
 
-        System.out.println(verde+negrita+"Billetera virtual creada con éxito!");
-        System.out.println(verde+negrita+"Propietario: "+billeteraNueva.getPropietario());
-        System.out.println(verde+negrita+"Numero de tarjeta: "+billeteraNueva.getNumTarjeta());
-        System.out.println(verde+negrita+"Saldo: "+billeteraNueva.getSaldo());
-    }
+            System.out.println(verde+negrita+"Billetera virtual creada con éxito!");
+            System.out.println(verde+negrita+"Propietario: "+billeteraNueva.getPropietario());
+            System.out.println(verde+negrita+"Numero de tarjeta: "+billeteraNueva.getNumTarjeta());
+            System.out.println(verde+negrita+"Saldo: "+billeteraNueva.getSaldo());
+        }
 
 
 }

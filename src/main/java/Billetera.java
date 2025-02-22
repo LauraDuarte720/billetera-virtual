@@ -54,7 +54,7 @@ public class Billetera {
             this.propietario = propietario;
         }
 
-    //METODO crearBilletera
+
 
 
 }

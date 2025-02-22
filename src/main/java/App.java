@@ -34,12 +34,9 @@ public class App {
                 8: Consultar transacciones
                 9: Obtener porcentaje de gastos e ingresos de un usuario dado el mes
                 10: Salir
-
                  */
 
                 try {
-
-
                     int opcionMenuPrincipal = Banco.leerEnteroValido(scanner, azul + negrita + "Seleccione una opción: " + reset);
                     switch (opcionMenuPrincipal) {
                         case 1:
@@ -61,16 +58,17 @@ public class App {
                             break;
 
                         case 4:
-                            billetera.crearBilletera();
+                            banco.crearBilletera();
                             break;
 
                         case 5:
 
 
                     }
-                }catch (Exception e){
+                }catch (Exception e) {
                     e.printStackTrace();
                 }
+            }
     }
 }
 
