@@ -26,8 +26,7 @@ public class Billetera {
         this.numTarjeta = numTarjeta;
         this.saldo = saldo;
         this.propietario = propietario;
-        ArrayList<Transaccion> transacciones = new ArrayList<>();
-        ArrayList<Usuario> usuarios = new ArrayList<>();
+        this.transacciones = new ArrayList<>();
     }
 
     //GETTERS Y SETTERS
@@ -73,9 +72,8 @@ public class Billetera {
         return transacciones;
     }
 
-    public Transaccion realizarTransaccion(float saldoTransferir, CATEGORIA categoria,Billetera origen,  Billetera destino) throws Exception{
+    public Transaccion realizarTransaccion(Banco banco,float saldoTransferir, CATEGORIA categoria,Billetera origen,  Billetera destino) throws Exception{
 
-        Banco banco=new Banco("");
         ArrayList<Billetera>billeteras=banco.getBilleteras();
         boolean origenValido=false;
         boolean destinoValido=false;
@@ -105,5 +103,9 @@ public class Billetera {
         return transaccion;
     }
 
-
+    public void agregarTransaccion(Transaccion transaccion){
+        transacciones.add(transaccion);
+    }
 }
+
+

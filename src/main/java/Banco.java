@@ -222,6 +222,12 @@ public class Banco {
             System.out.println(verde+negrita+"Saldo: "+billeteraNueva.getSaldo());
         }
 
+    //METODO PARA AGREGAR LAS BILLETERAS
+        public void agregarBilleteraABanco(Billetera... nuevasBilleteras){
+            for(Billetera billetera : nuevasBilleteras){
+                billeteras.add(billetera);
+            }
+        }
 
 }
 
