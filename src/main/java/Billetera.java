@@ -106,6 +106,10 @@ public class Billetera {
     public void agregarTransaccion(Transaccion transaccion){
         transacciones.add(transaccion);
     }
+
+    public double sumarMonto(Transaccion transaccion, Billetera billetera){
+        return transaccion.getMonto()+ billetera.getSaldo();
+    }
 }
 
 
