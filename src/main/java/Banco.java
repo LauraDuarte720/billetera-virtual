@@ -95,6 +95,14 @@ public class Banco {
                     idValido = true;
                 }
             }
+            boolean correoValido = false;
+            while(!correoValido){
+                if (!correo.contains("@")) {
+                    throw new Exception(rojo + negrita + "Ingrese un correo válido" + reset);
+                }else{
+                    correoValido = true;
+                }
+            }
             usuarios.add(new Usuario(nombre, direccion, id, correo, contrasena));
             System.out.println(negrita+verde+"Usuario registrado como "+reset+oro+negrita + nombre);
         }
@@ -228,6 +236,15 @@ public class Banco {
                 billeteras.add(billetera);
             }
         }
+
+    //METODO PARA AGREGAR LAS BILLETERAS
+        public void agregarBilleteraABanco(Billetera... nuevasBilleteras){
+            for(Billetera billetera : nuevasBilleteras){
+                billeteras.add(billetera);
+            }
+        }
+
+
 
 }
 
