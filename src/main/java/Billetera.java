@@ -97,7 +97,7 @@ public class Billetera {
                 throw new Exception("La billetera destino o billetera origen no estan registradas en el banco");
             }
         }
-
+//
 
         Transaccion transaccion=new Transaccion(LocalDateTime.now(), categoria,destino, origen, saldoTransferir);
         return transaccion;
