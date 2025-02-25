@@ -24,6 +24,7 @@ public class Banco {
         this.usuarios = new ArrayList<>();
         this.nombre = nombre;
         this.billeteras = new ArrayList<>();
+        this.transacciones= new ArrayList<>();
     }
 
     //GETTERS Y SETTERS
@@ -238,24 +239,22 @@ public class Banco {
     }
 
     //METODO PARA AGREGAR LAS BILLETERAS
-    public void agregarBilleteraABanco(Billetera... nuevasBilleteras) {
-        for (Billetera billetera : nuevasBilleteras) {
+    public void agregarBilleteraABanco(Billetera billetera) {
             billeteras.add(billetera);
-        }
     }
 
-    public void agregarUsuarioABanco(Usuario... nuevosUsuarios) {
-        for (Usuario usuario : usuarios) {
+    public void agregarUsuarioABanco(Usuario usuario) {
             usuarios.add(usuario);
-        }
     }
 
+    public void agregarTransaccionABanco(Transaccion transaccion) {
+        transacciones.add(transaccion);
+    }
 
     public ArrayList<String> consultarSaldo(String cedula, String contrasena) throws Exception {
         ArrayList<String> saldoTransacciones = new ArrayList<>();
         Usuario usuarioConsultar = null;
 
-        // Buscar usuario
         for (Usuario usuario : usuarios) {
             if (usuario.getId().equals(cedula) && usuario.getContrasena().equals(contrasena)) {
                 usuarioConsultar = usuario;
@@ -267,19 +266,20 @@ public class Banco {
             throw new Exception("El usuario no es valido");
         }
 
-        // Buscar la billetera asociada
+        boolean tieneBilletera = false;
         for (Billetera billetera : billeteras) {
             if (billetera.getPropietario().equals(usuarioConsultar)) {
-                saldoTransacciones.add("Saldo: " + billetera.getSaldo());
-
-                for (Transaccion transaccion : billetera.getTransacciones()) {
-                    saldoTransacciones.add(String.valueOf(transaccion));
-                }
-                break;
+                tieneBilletera = true;
+                saldoTransacciones.add(billetera.getTransacciones().toString());
+                saldoTransacciones.add(String.valueOf(billetera.getSaldo()));
             }
         }
 
-        return saldoTransacciones;
+        if (!tieneBilletera) {
+            saldoTransacciones.add("El usuario no tiene billetera asociada.");
+        }
 
+        return saldoTransacciones;
     }
+
 }

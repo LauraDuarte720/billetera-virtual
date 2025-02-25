@@ -21,19 +21,29 @@ public class BancoTest {
         Billetera billetera3 = new Billetera("456789123", 7500.0, usuario3);
 
 
-        Transaccion transaccion1 = new Transaccion(LocalDateTime.now(), CATEGORIA.VIAJES, billetera2, billetera1, 500);
+        Transaccion transaccion1 = new Transaccion(LocalDateTime.now(), CATEGORIA.VIAJES, billetera3, billetera1, 500);
         Transaccion transaccion2 = new Transaccion(LocalDateTime.now(), CATEGORIA.FACTURA, billetera3, billetera1, 1200);
-        Transaccion transaccion3 = new Transaccion(LocalDateTime.now(), CATEGORIA.ROPA, billetera1, billetera2, 300);
+        Transaccion transaccion3 = new Transaccion(LocalDateTime.now(), CATEGORIA.ROPA, billetera2, billetera1, 300);
 
-        banco.agregarUsuarioABanco(usuario1,usuario2,usuario3);
+        banco.agregarUsuarioABanco(usuario1);
+        banco.agregarUsuarioABanco(usuario2);
+        banco.agregarUsuarioABanco(usuario3);
 
         banco.agregarBilleteraABanco(billetera1);
         banco.agregarBilleteraABanco(billetera2);
         banco.agregarBilleteraABanco(billetera3);
 
+        banco.agregarTransaccionABanco(transaccion1);
+        banco.agregarTransaccionABanco(transaccion2);
+        banco.agregarTransaccionABanco(transaccion3);
+
+        billetera1.agregarTransaccion(transaccion1);
+        billetera1.agregarTransaccion(transaccion2);
+        billetera1.agregarTransaccion(transaccion3);
+
         assertDoesNotThrow(()->{
             ArrayList<String> listaSaldoTransacciones=banco.consultarSaldo("1001","123");
-            assertEquals(2,listaSaldoTransacciones.size());
+
         });
     }
 

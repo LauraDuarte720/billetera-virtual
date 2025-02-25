@@ -95,6 +95,28 @@ public class BilleteraTest {
             assertEquals(billetera1.consultarTransaccionesTiempo(LocalDateTime.of(2025,1,24,12,0,0), LocalDateTime.of(2025,3,24,12,0,0)).size(), 1);
         });
     }
+
+    @Test
+    public void porcentajeGastosTest(){
+        Banco banco = new Banco("banco 123");
+
+        Billetera billetera1 = new Billetera("123456789", 5000.0, null);
+        Billetera billetera2 = new Billetera("987654321", 10000.0, null);
+        Billetera billetera3 = new Billetera("456789123", 7500.0, null);
+
+        banco.agregarBilleteraABanco(billetera1);
+        banco.agregarBilleteraABanco(billetera2);
+        banco.agregarBilleteraABanco(billetera3);
+
+
+        assertDoesNotThrow(()->{
+            billetera1.realizarTransaccion(banco,500, CATEGORIA.ROPA, billetera1, billetera2);
+            billetera1.realizarTransaccion(banco,1000, CATEGORIA.ROPA, billetera1, billetera3);
+            double porcentajeEsperado = ((1900.0/5000.0)*100.0);
+            assertEquals(porcentajeEsperado, billetera1.porcentajeGastos(billetera1, LocalDateTime.of(2025,1,1,12,12,12), LocalDateTime.of(2025,4,1,12,12,12), CATEGORIA.ROPA));
+        });
+
+    }
 }
 
 

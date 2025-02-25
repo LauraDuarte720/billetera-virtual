@@ -153,6 +153,30 @@ public class Billetera {
         }
         return listaTransacciones;
     }
+
+    //METODO PARA OBTENER EL PORCENTAJE DE GASTOS
+    public double porcentajeGastos(Billetera billetera, LocalDateTime fechaInicio, LocalDateTime fechaFinal, CATEGORIA categoria) throws Exception {
+        double gastosTotales = 0;
+        for (Transaccion transaccion : transacciones) {
+            if (transaccion.getFecha().isAfter(fechaInicio) && transaccion.getFecha().isBefore(fechaFinal) && transaccion.getCategoria().equals(categoria)){
+                gastosTotales += (transaccion.getMonto());
+            }
+        }
+        return Math.round((gastosTotales / billetera.getSaldo()) * 100 * 1.0) / 1.0;
+    }
+
+
+    //METODO PARA OBTENER EL PORCENTAJE DE INGRESOS
+    public double porcentajeIngresos(Billetera billetera, LocalDateTime fechaInicio, LocalDateTime fechaFinal, Banco banco, CATEGORIA categoria) throws Exception{
+        double ingresosTotales = 0;
+        ArrayList<Transaccion> transacciones = banco.getTransacciones();
+        for(Transaccion transaccion : transacciones) {
+            if(transaccion.getDestinatario().equals(billetera) && transaccion.getCategoria().equals(categoria) && transaccion.getFecha().isAfter(fechaInicio) && transaccion.getFecha().isBefore(fechaFinal)){
+                ingresosTotales+= transaccion.getMonto();
+            }
+        }
+        return (ingresosTotales/ billetera.getSaldo()) * 100;
+    }
 }
 
 
