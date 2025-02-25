@@ -20,7 +20,8 @@ public class Transaccion {
         this.destinatario = destinatario;
         this.origen=origen;
         this.monto=monto;
-        this.identificador=identificador;
+        this.identificador=generarIdentificadorDeTransaccion();
+
     }
     //GETTERS Y SETTERS
         public LocalDateTime getFecha() {
@@ -63,8 +64,21 @@ public class Transaccion {
             this.origen = origen;
         }
 
+        public static UUID generarIdentificadorDeTransaccion(){
+            return UUID.randomUUID();
+        }
 
-    //
+    @Override
+    public String toString() {
+        return "Transaccion{" +
+                "fecha=" + fecha +
+                ", categoria=" + categoria +
+                ", destinatario=" + destinatario +
+                ", origen=" + origen +
+                ", monto=" + monto +
+                ", identificador=" + identificador +
+                '}';
+    }
 }
 
 

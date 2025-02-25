@@ -1,3 +1,4 @@
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -40,6 +41,7 @@ public class App {
                     int opcionMenuPrincipal = Banco.leerEnteroValido(scanner, azul + negrita + "Seleccione una opción: " + reset);
                     switch (opcionMenuPrincipal) {
                         case 1:
+
                             System.out.println(azul + negrita + "Has seleccionado registrar un usuario!" + reset);
                             String nombre = Banco.leerTextoValido(scanner, azul + "Ingrese su nombre: " + reset);
                             String direccion = Banco.leerTextoValido(scanner, azul + "Ingrese su dirección: " + reset);

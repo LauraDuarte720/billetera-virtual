@@ -8,7 +8,7 @@ public class BilleteraTest {
 
     @Test
 
-    public void realizarTransaccion(){
+    public void realizarTransaccionTest(){
         Banco banco = new Banco("banco 123");
 
         Billetera billetera1 = new Billetera("123456789", 5000.0, "Juan Pérez");
@@ -34,12 +34,50 @@ public class BilleteraTest {
             assertEquals(transaccionPrueba.getOrigen(), transaccionRealizada.getOrigen());
             assertEquals(transaccionPrueba.getDestinatario(), transaccionRealizada.getDestinatario());
             assertEquals(transaccionPrueba.getMonto(), transaccionRealizada.getMonto());
+
         });
 
 
 
     }
 
+    @Test
+
+    public void cambioSaldoValidoTest(){
+
+        Banco banco = new Banco("banco 123");
+
+        Billetera billetera1 = new Billetera("123456789", 5000.0, "Juan Pérez");
+        Billetera billetera2 = new Billetera("987654321", 10000.0, "María Gómez");
+        Billetera billetera3 = new Billetera("456789123", 7500.0, "Carlos Rodríguez");
+
+        banco.agregarBilleteraABanco(billetera1);
+        banco.agregarBilleteraABanco(billetera2);
+        banco.agregarBilleteraABanco(billetera3);
+
+        assertDoesNotThrow(()->{
+        Transaccion transaccionRealizada=billetera1.realizarTransaccion(banco,3000,CATEGORIA.VIAJES,billetera1,billetera2);
+
+        });
+
+        assertEquals(13000,billetera2.getSaldo());
+        assertEquals(1800,billetera1.getSaldo());
+
+    }
+
+    @Test
+
+    public void recargarBilleteraTest(){
+
+        Billetera billetera1 = new Billetera("123456789", 5000.0, "Juan Pérez");
+
+        assertDoesNotThrow(()->{
+            billetera1.recargarBilletera(5000);
+        });
+
+        assertEquals(10000,billetera1.getSaldo());
+        }
+
+    }
 
 
-}

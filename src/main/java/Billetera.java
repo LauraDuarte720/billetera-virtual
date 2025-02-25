@@ -1,5 +1,6 @@
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Scanner;
 import java.util.Random;
 
@@ -64,8 +65,27 @@ public class Billetera {
 
     // Metodo Consultar Saldo
 
-    public double consultarSaldo() {
-        return saldo;
+    public ArrayList<String> consultarSaldo(Banco banco, String cedula,String contrasena) throws Exception {
+        ArrayList<Usuario>usuarios=banco.getUsuarios();
+        boolean usuarioValido=false;
+        for(Usuario usuario:usuarios){
+            if (usuario.getContrasena().equals(contrasena) && usuario.getId().equals(cedula)) {
+                usuarioValido = true;
+                break;
+            }
+        }
+        throw new Exception("El usuario no esta registrado");
+
+        double
+
+        ArrayList<String>listaTransacciones=new ArrayList<>();
+        for(Transaccion transaccion:transacciones){
+            listaTransacciones.add(transaccion.toString());
+        }
+
+
+
+        return ;
     }
 
     public ArrayList<Transaccion> consultarTransacciones() {
@@ -97,9 +117,15 @@ public class Billetera {
                 throw new Exception("La billetera destino o billetera origen no estan registradas en el banco");
             }
         }
-//
+
 
         Transaccion transaccion=new Transaccion(LocalDateTime.now(), categoria,destino, origen, saldoTransferir);
+
+        origen.restarSaldo(saldoTransferir,origen);
+        destino.sumarMonto(saldoTransferir,destino);
+
+        origen.agregarTransaccion(transaccion);
+
         return transaccion;
     }
 
@@ -107,8 +133,29 @@ public class Billetera {
         transacciones.add(transaccion);
     }
 
-    public double sumarMonto(Transaccion transaccion, Billetera billetera){
-        return transaccion.getMonto()+ billetera.getSaldo();
+    public void sumarMonto(double saldoTransferencia, Billetera billetera){
+        double nuevoSaldoDestino= saldoTransferencia+ billetera.getSaldo();
+        billetera.setSaldo( nuevoSaldoDestino);
+    }
+
+    public void restarSaldo(double saldoTransferencia, Billetera billetera){
+        double nuevoSaldoOrigen=billetera.getSaldo() - saldoTransferencia-COSTO;
+        billetera.setSaldo(nuevoSaldoOrigen);
+    }
+
+    public void recargarBilletera(double saldoARecargar) throws Exception{
+        boolean recargaValida = false;
+        while(!recargaValida){
+            if (saldoARecargar <= 0) {
+                throw new Exception("Seleccione un saldo correcto para recargar!");
+            } else {
+                recargaValida = true;
+            }
+        }
+        if (recargaValida){
+            double saldoNuevo=saldo + saldoARecargar;
+            setSaldo(saldoNuevo);
+        }
     }
 }
 
