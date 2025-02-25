@@ -9,7 +9,7 @@ public class Billetera {
     //INSTANCIAS NECESARIAS
     private String numTarjeta;
     private double saldo;
-    private String propietario;
+    private Usuario propietario;
     private ArrayList<Transaccion> transacciones;
     private static  final float COSTO = 200;
 
@@ -23,7 +23,7 @@ public class Billetera {
 
 
     //CONSTRUCTOR
-    public Billetera(String numTarjeta, double saldo, String propietario) {
+    public Billetera(String numTarjeta, double saldo, Usuario propietario) {
         this.numTarjeta = numTarjeta;
         this.saldo = saldo;
         this.propietario = propietario;
@@ -55,38 +55,14 @@ public class Billetera {
         this.transacciones = transacciones;
     }
 
-    public String getPropietario() {
+    public Usuario getPropietario() {
         return propietario;
     }
 
-    public void setPropietario(String propietario) {
+    public void setPropietario(Usuario propietario) {
         this.propietario = propietario;
     }
 
-    // Metodo Consultar Saldo
-
-    public ArrayList<String> consultarSaldo(Banco banco, String cedula,String contrasena) throws Exception {
-        ArrayList<Usuario>usuarios=banco.getUsuarios();
-        boolean usuarioValido=false;
-        for(Usuario usuario:usuarios){
-            if (usuario.getContrasena().equals(contrasena) && usuario.getId().equals(cedula)) {
-                usuarioValido = true;
-                break;
-            }
-        }
-        throw new Exception("El usuario no esta registrado");
-
-        double
-
-        ArrayList<String>listaTransacciones=new ArrayList<>();
-        for(Transaccion transaccion:transacciones){
-            listaTransacciones.add(transaccion.toString());
-        }
-
-
-
-        return ;
-    }
 
     public ArrayList<Transaccion> consultarTransacciones() {
         return transacciones;
@@ -156,6 +132,26 @@ public class Billetera {
             double saldoNuevo=saldo + saldoARecargar;
             setSaldo(saldoNuevo);
         }
+    }
+
+    //METODO CONSULTAR TRANSACCIONES DADO TIEMPO
+    public ArrayList<Transaccion> consultarTransaccionesTiempo(LocalDateTime fechaInicio, LocalDateTime fechaFinal) throws Exception {
+        ArrayList<Transaccion>listaTransacciones=new ArrayList<>();
+        if(fechaInicio.isAfter(fechaFinal)){
+            throw new Exception("La segunda fecha tiene que ser despues de la primera");
+        }
+        boolean tiempoValido=false;
+        while(!tiempoValido){
+            for (Transaccion transaccion : transacciones) {
+                if (transaccion.getFecha().isAfter(fechaInicio) && transaccion.getFecha().isBefore(fechaFinal)) {
+                    listaTransacciones.add(transaccion);
+                    tiempoValido=true;
+                } else {
+                    throw new Exception("No hay transacciones realizadas por esta billetera en ese intervalo de tiempo.");
+                }
+            }
+        }
+        return listaTransacciones;
     }
 }
 
