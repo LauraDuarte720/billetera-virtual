@@ -167,7 +167,7 @@ public class Billetera {
 
 
     //METODO PARA OBTENER EL PORCENTAJE DE INGRESOS
-    public double porcentajeIngresos(Billetera billetera, LocalDateTime fechaInicio, LocalDateTime fechaFinal, Banco banco, CATEGORIA categoria) throws Exception{
+    public double calcularPorcentajeIngresos(Billetera billetera, LocalDateTime fechaInicio, LocalDateTime fechaFinal, Banco banco, CATEGORIA categoria) throws Exception{
         double ingresosTotales = 0;
         ArrayList<Transaccion> transacciones = banco.getTransacciones();
         for(Transaccion transaccion : transacciones) {
@@ -178,8 +178,11 @@ public class Billetera {
         return (ingresosTotales/ billetera.getSaldo()) * 100;
     }
 
-    public double porcentajeGastosIngresosTotales(LocalDateTime fechaInicio, LocalDateTime fechaFinal, boolean gastos){
+    public double calcularPorcentajeGastosIngresosTotales(LocalDateTime fechaInicio, LocalDateTime fechaFinal, boolean gastos) throws Exception {
 
+        if(fechaInicio.isAfter(fechaFinal)){
+            throw new Exception("La fecha de inicio debe de ser antes de la fecha final");
+        }
         ArrayList<Transaccion> transaccionesFilatradas = obtenerTransaccionesFiltradas(fechaInicio, fechaFinal);
         double ingresosTotales = 0;
         double gastosTotales = 0;
@@ -196,15 +199,18 @@ public class Billetera {
         double total = ingresosTotales+gastosTotales;
 
         if(gastos){
-            return gastosTotales/total;
+            return (gastosTotales/total)*100;
         }
-        return ingresosTotales/total;
+        return (ingresosTotales/total)*100;
 
 
     }
 
-    public double porcentajeGastosIngresosCategoria(LocalDateTime fechaInicio, LocalDateTime fechaFinal, CATEGORIA categoria,boolean gastos){
+    public double calcularPorcentajeGastosIngresosCategoria (LocalDateTime fechaInicio, LocalDateTime fechaFinal, CATEGORIA categoria,boolean gastos) throws Exception{
 
+        if(fechaInicio.isAfter(fechaFinal)){
+            throw new Exception("La fecha de inicio debe de ser antes de la fecha final");
+        }
         ArrayList<Transaccion> transaccionesFilatradas = obtenerTransaccionesFiltradasCategoria(fechaInicio, fechaFinal, categoria);
         double ingresosTotales = 0;
         double gastosTotales = 0;
@@ -221,9 +227,9 @@ public class Billetera {
         double total = ingresosTotales+gastosTotales;
 
         if(gastos){
-            return gastosTotales/total;
+            return (gastosTotales/total)*100;
         }
-        return ingresosTotales/total;
+        return (ingresosTotales/total)*100;
 
 
     }
