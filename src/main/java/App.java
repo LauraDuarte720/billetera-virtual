@@ -6,7 +6,7 @@ public class App {
     public static void main(String[] args) {
         //INSTANCIAS NECESARIAS
             Banco banco = new Banco("banco 123");
-            Billetera billetera = new Billetera("", 0, null);
+            //Billetera billetera = new Billetera("", 0, null);
             boolean salir = false;
             Usuario usermain = null;
             Scanner scanner = new Scanner(System.in);

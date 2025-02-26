@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 
+//CLASE PARA EL METODO CONSULTAR SALDO Y TRANSACCIONES
 public class SaldoTransacciones {
 
     private ArrayList<Transaccion> transaccions;

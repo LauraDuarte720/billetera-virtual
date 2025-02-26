@@ -11,9 +11,9 @@ public class BilleteraTest {
     public void realizarTransaccionTest(){
         Banco banco = new Banco("banco 123");
 
-        Billetera billetera1 = new Billetera("123456789", 5000.0, null);
-        Billetera billetera2 = new Billetera("987654321", 10000.0, null);
-        Billetera billetera3 = new Billetera("456789123", 7500.0, null);
+        Billetera billetera1 = new Billetera( 5000.0, null);
+        Billetera billetera2 = new Billetera( 10000.0, null);
+        Billetera billetera3 = new Billetera( 7500.0, null);
 
         banco.agregarBilleteraABanco(billetera1);
         banco.agregarBilleteraABanco(billetera2);
@@ -48,9 +48,9 @@ public class BilleteraTest {
 
         Banco banco = new Banco("banco 123");
 
-        Billetera billetera1 = new Billetera("123456789", 5000.0, null);
-        Billetera billetera2 = new Billetera("987654321", 10000.0, null);
-        Billetera billetera3 = new Billetera("456789123", 7500.0, null);
+        Billetera billetera1 = new Billetera( 5000.0, null);
+        Billetera billetera2 = new Billetera(10000.0, null);
+        Billetera billetera3 = new Billetera(7500.0, null);
 
         banco.agregarBilleteraABanco(billetera1);
         banco.agregarBilleteraABanco(billetera2);
@@ -69,7 +69,7 @@ public class BilleteraTest {
     @Test
     public void recargarBilleteraTest(){
 
-        Billetera billetera1 = new Billetera("123456789", 5000.0, null);
+        Billetera billetera1 = new Billetera( 5000.0, null);
 
         assertDoesNotThrow(()->{
             billetera1.recargarBilletera(5000);
@@ -82,9 +82,9 @@ public class BilleteraTest {
     public void consultarTransaccionesDadoTiempoTest(){
         Banco banco = new Banco("banco 123");
 
-        Billetera billetera1 = new Billetera("123456789", 5000.0, null);
-        Billetera billetera2 = new Billetera("987654321", 10000.0, null);
-        Billetera billetera3 = new Billetera("456789123", 7500.0, null);
+        Billetera billetera1 = new Billetera( 5000.0, null);
+        Billetera billetera2 = new Billetera( 10000.0, null);
+        Billetera billetera3 = new Billetera( 7500.0, null);
 
         banco.agregarBilleteraABanco(billetera1);
         banco.agregarBilleteraABanco(billetera2);
@@ -96,32 +96,11 @@ public class BilleteraTest {
         });
     }
 
-    @Test
-    public void porcentajeGastosTest(){
-        Banco banco = new Banco("banco 123");
-
-        Billetera billetera1 = new Billetera("123456789", 5000.0, null);
-        Billetera billetera2 = new Billetera("987654321", 10000.0, null);
-        Billetera billetera3 = new Billetera("456789123", 7500.0, null);
-
-        banco.agregarBilleteraABanco(billetera1);
-        banco.agregarBilleteraABanco(billetera2);
-        banco.agregarBilleteraABanco(billetera3);
-
-
-        assertDoesNotThrow(()->{
-            billetera1.realizarTransaccion(500, CATEGORIA.ROPA, billetera1, billetera2);
-            billetera1.realizarTransaccion(1000, CATEGORIA.ROPA, billetera1, billetera3);
-            double porcentajeEsperado = ((1900.0/5000.0)*100.0);
-            assertEquals(porcentajeEsperado, billetera1.porcentajeGastos(LocalDateTime.of(2025,1,1,12,12,12), LocalDateTime.of(2025,4,1,12,12,12), CATEGORIA.ROPA));
-        });
-
-    }
 
     @Test
     public void calcularPorcentajeGastosIngresosTotalesTest() throws Exception{
-        Billetera billetera1 = new Billetera("123456789", 5000.0, null);
-        Billetera billetera2 = new Billetera("987654321", 10000.0, null);
+        Billetera billetera1 = new Billetera( 5000.0, null);
+        Billetera billetera2 = new Billetera( 10000.0, null);
 
         Transaccion transaccion1 = new Transaccion(LocalDateTime.now(), CATEGORIA.VIAJES, billetera2, billetera1, 500);
         Transaccion transaccion2 = new Transaccion(LocalDateTime.now(), CATEGORIA.FACTURA, billetera2, billetera1, 1200);
@@ -144,10 +123,79 @@ public class BilleteraTest {
 
     @Test
     public void calcularPorcentajeGastosIngresosTotalesErrorTest() throws Exception{
-        Billetera billetera1 = new Billetera("123456789", 5000.0, null);
+        Billetera billetera1 = new Billetera( 5000.0, null);
 
         assertThrows(Throwable.class, () -> billetera1.calcularPorcentajeGastosIngresosTotales(LocalDateTime.of(2030, 12, 8, 1,2,2), LocalDateTime.of(2000, 12, 8, 1,2,2), false));
 
+    }
+
+    @Test
+    public void calcularPorcentajeGastosIngresosTotalesCategoriaTest() throws Exception{
+        Billetera billetera1 = new Billetera( 5000.0, null);
+        Billetera billetera2 = new Billetera( 10000.0, null);
+
+        Transaccion transaccion1 = new Transaccion(LocalDateTime.now(), CATEGORIA.VIAJES, billetera2, billetera1, 500);
+        Transaccion transaccion2 = new Transaccion(LocalDateTime.now(), CATEGORIA.VIAJES, billetera2, billetera1, 1200);
+        Transaccion transaccion3 = new Transaccion(LocalDateTime.now(), CATEGORIA.VIAJES, billetera1, billetera2, 300);
+        Transaccion transaccion4 = new Transaccion(LocalDateTime.now(), CATEGORIA.FACTURA, billetera1, billetera2, 400);
+
+        billetera1.agregarTransaccion(transaccion1);
+        billetera1.agregarTransaccion(transaccion2);
+        billetera1.agregarTransaccion(transaccion3);
+        billetera1.agregarTransaccion(transaccion4);
+        billetera2.agregarTransaccion(transaccion1);
+        billetera2.agregarTransaccion(transaccion2);
+        billetera2.agregarTransaccion(transaccion3);
+        billetera2.agregarTransaccion(transaccion4);
+
+        double valorEsperadoGastos = (1700.0/2000.0)*100.0;
+        assertEquals(valorEsperadoGastos, billetera1.calcularPorcentajeGastosIngresosCategoria(LocalDateTime.of(2000, 12, 8, 1,2,2), LocalDateTime.of(2030, 12, 8, 1,2,2),CATEGORIA.VIAJES, true));
+
+        double valorEsperadoIngresos = (300/2000.0)*100.0;
+        assertEquals(valorEsperadoIngresos, billetera1.calcularPorcentajeGastosIngresosCategoria(LocalDateTime.of(2000, 12, 8, 1,2,2), LocalDateTime.of(2030, 12, 8, 1,2,2),CATEGORIA.VIAJES,false));
+
+    }
+
+    //TEST CONSULTAR SALDO
+    @Test
+    public void consultarSaldoTest() {
+
+        Banco banco = new Banco("banco 123");
+
+        Usuario usuario1 = new Usuario("Juan Pérez", "Calle 123", "1001", "juan@example.com", "123");
+        Usuario usuario2 = new Usuario("María Gómez", "Avenida 456", "1002", "maria@example.com", "securepass");
+        Usuario usuario3 = new Usuario("Carlos López", "Carrera 789", "1003", "carlos@example.com", "mypassword");
+
+        Billetera billetera1 = new Billetera( 5000.0, usuario1);
+        Billetera billetera2 = new Billetera( 10000.0, usuario2);
+        Billetera billetera3 = new Billetera( 7500.0, usuario3);
+
+
+        Transaccion transaccion1 = new Transaccion(LocalDateTime.now(), CATEGORIA.VIAJES, billetera3, billetera1, 500);
+        Transaccion transaccion2 = new Transaccion(LocalDateTime.now(), CATEGORIA.FACTURA, billetera3, billetera1, 1200);
+        Transaccion transaccion3 = new Transaccion(LocalDateTime.now(), CATEGORIA.ROPA, billetera2, billetera1, 300);
+
+        banco.agregarUsuarioABanco(usuario1);
+        banco.agregarUsuarioABanco(usuario2);
+        banco.agregarUsuarioABanco(usuario3);
+
+        banco.agregarBilleteraABanco(billetera1);
+        banco.agregarBilleteraABanco(billetera2);
+        banco.agregarBilleteraABanco(billetera3);
+
+        banco.agregarTransaccionABanco(transaccion1);
+        banco.agregarTransaccionABanco(transaccion2);
+        banco.agregarTransaccionABanco(transaccion3);
+
+        billetera1.agregarTransaccion(transaccion1);
+        billetera1.agregarTransaccion(transaccion2);
+        billetera1.agregarTransaccion(transaccion3);
+
+        assertDoesNotThrow(()->{
+            SaldoTransacciones saldoTransacciones = banco.consultarSaldo("1001","123");
+            assertEquals(3, saldoTransacciones.getTransaccions().size());
+
+        });
     }
 }
 

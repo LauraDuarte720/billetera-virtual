@@ -5,11 +5,13 @@ import java.util.Scanner;
 
 public class Banco {
 
-    //INSTANCIAS NECESARIAS
+    //ATRIBUTOS
     private String nombre;
     private ArrayList<Usuario> usuarios;
     private ArrayList<Transaccion> transacciones;
     private ArrayList<Billetera> billeteras;
+
+    //SCANNER PARA EL APP
     Scanner scanner = new Scanner(System.in);
     String negrita = "\u001B[1m";
     String reset = "\u001B[0m";
@@ -60,6 +62,68 @@ public class Banco {
         this.billeteras = billeteras;
     }
 
+    //VERSIONES NO INTERACTIVAS PARA LOS METODOS DE ELIMINAR,ACTUALIZAR,REGISTRAR USUARIO
+    public void regUsuario(String nombre, String direccion, String id, String correo, String contrasena) throws Exception {
+        if (nombre == null || nombre.trim().isEmpty()) {
+            throw new Exception("El nombre no puede estar vacío.");
+        }
+        if (direccion == null || direccion.trim().isEmpty()) {
+            throw new Exception("La dirección no puede estar vacía.");
+        }
+        if (id == null || !id.matches("\\d+")) {
+            throw new Exception("El ID debe ser un número válido.");
+        }
+        if (correo == null || !correo.contains("@")) {
+            throw new Exception("El correo electrónico no es válido.");
+        }
+        if (contrasena == null || contrasena.length() < 6) {
+            throw new Exception("La contraseña debe tener al menos 6 caracteres.");
+        }
+
+        usuarios.add(new Usuario(nombre, direccion, id, correo, contrasena));
+    }
+
+    public void actUsuario(String idViejo, String nuevoNombre, String nuevaDireccion, String nuevoId, String nuevoCorreo, String nuevaContrasena) throws Exception {
+
+        Usuario usuarioConsultar= null;
+            for(Usuario usuario:usuarios){
+                if(usuario.getId().equals(idViejo)){
+                    usuarioConsultar= usuario;
+                    break;
+                }
+            }
+
+        if (usuarioConsultar == null) {
+            throw new Exception("El usuario no existe");
+        }
+        if (nuevoNombre != null && !nuevoNombre.trim().isEmpty()) {
+            usuarioConsultar.setNombre(nuevoNombre);
+        }
+        if (nuevaDireccion != null && !nuevaDireccion.trim().isEmpty()) {
+            usuarioConsultar.setDireccion(nuevaDireccion);
+        }
+        if (nuevoId != null && nuevoId.matches("\\d+")) {
+            usuarioConsultar.setId(nuevoId);
+        }
+        if (nuevoCorreo != null && nuevoCorreo.contains("@")) {
+            usuarioConsultar.setCorreo(nuevoCorreo);
+        }
+        if (nuevaContrasena != null && nuevaContrasena.length() >= 6) {
+            usuarioConsultar.setContrasena(nuevaContrasena);
+        }
+    }
+
+    public void elimUsuario(String idEliminar) throws Exception {
+        Usuario usuarioEliminar = null;
+        for(Usuario usuario: usuarios){
+            if(usuario.getId().equals(idEliminar)){
+                usuarioEliminar = usuario;
+            }
+        }
+        usuarios.remove(usuarioEliminar);
+    }
+
+    //PARTE DEL METODO PARA REALIZAR LA TRANSACCION
     public Transaccion realizarTransaccion(float saldoTransferir, CATEGORIA categoria,String numBilleteraOrigen, String numBilleteraDestino) throws Exception{
         boolean origenValido=false;
         boolean destinoValido=false;
@@ -93,7 +157,53 @@ public class Banco {
         return billeteraOrigen.realizarTransaccion(saldoTransferir, categoria, billeteraOrigen, billeteraDestino );
     }
 
-        //METODOS PARA LA OPTIMIZACION DEL CODIGO
+
+    //METODOS PARA AGREGAR LAS BILLETERAS, USUARIOS, TRANSACCIONES
+    public void agregarBilleteraABanco(Billetera billetera) {
+        billeteras.add(billetera);
+    }
+
+    public void agregarUsuarioABanco(Usuario usuario) {
+        usuarios.add(usuario);
+    }
+
+    public void agregarTransaccionABanco(Transaccion transaccion) {
+        transacciones.add(transaccion);
+    }
+
+    //METODO PARA CONSULTAR SALDO Y TRANSACCIONES
+    public SaldoTransacciones consultarSaldo(String cedula, String contrasena) throws Exception {
+        SaldoTransacciones saldoTransacciones = new SaldoTransacciones();
+        Usuario usuarioConsultar = null;
+
+        for (Usuario usuario : usuarios) {
+            if (usuario.getId().equals(cedula) && usuario.getContrasena().equals(contrasena)) {
+                usuarioConsultar = usuario;
+                break;
+            }
+        }
+
+        if (usuarioConsultar == null) {
+            throw new Exception("El usuario no es valido");
+        }
+
+        boolean tieneBilletera = false;
+        for (Billetera billetera : billeteras) {
+            if (billetera.getPropietario().equals(usuarioConsultar)) {
+                tieneBilletera = true;
+                saldoTransacciones.setTransaccions(billetera.getTransacciones());
+                saldoTransacciones.setSaldo(billetera.getSaldo());
+            }
+        }
+
+        return saldoTransacciones;
+    }
+
+    //METOD PARA CREAR LA BILLETERA
+
+
+
+    //METODOS PARA LA OPTIMIZACION DEL CODIGO (SI SE HACEN CON APP)
     public static String leerTextoValido(Scanner scanner, String mensaje) throws Exception {
         String texto;
         String reset = "\u001B[0m";
@@ -241,7 +351,7 @@ public class Banco {
 
     //METODO crearBilletera
     public void crearBilletera(String idPropietario) throws Exception {
-        Billetera billeteraNueva = new Billetera("", 0, null);
+        Billetera billeteraNueva = new Billetera( 0, null);
         String propietarioNuevo = Banco.leerTextoValido(scanner, azul + negrita + "Ingrese su nombre: " + reset);
         StringBuilder propietarioAsignado = new StringBuilder();
         for (Usuario usuario : usuarios) {
@@ -269,108 +379,7 @@ public class Banco {
         System.out.println(verde + negrita + "Saldo: " + billeteraNueva.getSaldo());
     }
 
-    //METODO PARA AGREGAR LAS BILLETERAS
-    public void agregarBilleteraABanco(Billetera billetera) {
-        billeteras.add(billetera);
-    }
 
-    public void agregarUsuarioABanco(Usuario usuario) {
-        usuarios.add(usuario);
-    }
-
-    public void agregarTransaccionABanco(Transaccion transaccion) {
-        transacciones.add(transaccion);
-    }
-
-    public SaldoTransacciones consultarSaldo(String cedula, String contrasena) throws Exception {
-        SaldoTransacciones saldoTransacciones = new SaldoTransacciones();
-        Usuario usuarioConsultar = null;
-
-        for (Usuario usuario : usuarios) {
-            if (usuario.getId().equals(cedula) && usuario.getContrasena().equals(contrasena)) {
-                usuarioConsultar = usuario;
-                break;
-            }
-        }
-
-        if (usuarioConsultar == null) {
-            throw new Exception("El usuario no es valido");
-        }
-
-        boolean tieneBilletera = false;
-        for (Billetera billetera : billeteras) {
-            if (billetera.getPropietario().equals(usuarioConsultar)) {
-                tieneBilletera = true;
-                saldoTransacciones.setTransaccions(billetera.getTransacciones());
-                saldoTransacciones.setSaldo(billetera.getSaldo());
-            }
-        }
-
-        return saldoTransacciones;
-    }
-
-
-    //VERSIONES NO INTERACTIVAS PARA LOS METODOS DE ELIMINAR,ACTUALIZAR,REGISTRAR USUARIO
-        public void regUsuario(String nombre, String direccion, String id, String correo, String contrasena) throws Exception {
-            if (nombre == null || nombre.trim().isEmpty()) {
-                throw new Exception("El nombre no puede estar vacío.");
-            }
-            if (direccion == null || direccion.trim().isEmpty()) {
-                throw new Exception("La dirección no puede estar vacía.");
-            }
-            if (id == null || !id.matches("\\d+")) {
-                throw new Exception("El ID debe ser un número válido.");
-            }
-            if (correo == null || !correo.contains("@")) {
-                throw new Exception("El correo electrónico no es válido.");
-            }
-            if (contrasena == null || contrasena.length() < 6) {
-                throw new Exception("La contraseña debe tener al menos 6 caracteres.");
-            }
-
-            usuarios.add(new Usuario(nombre, direccion, id, correo, contrasena));
-        }
-
-    public void actUsuario(String idViejo, String nuevoNombre, String nuevaDireccion, String nuevoId, String nuevoCorreo, String nuevaContrasena) throws Exception {
-        boolean actUsuarioValido = false;
-        Usuario usuarioConsultar= null;
-        while(!actUsuarioValido) {
-            for(Usuario usuario:usuarios){
-                if(usuario.getId().equals(idViejo)){
-                    actUsuarioValido = true;
-                    usuarioConsultar= usuario;
-
-                } else{
-                    throw new Exception("El usuario no existe");
-                }
-            }
-        }
-        if (nuevoNombre != null && !nuevoNombre.trim().isEmpty()) {
-            usuarioConsultar.setNombre(nuevoNombre);
-        }
-        if (nuevaDireccion != null && !nuevaDireccion.trim().isEmpty()) {
-            usuarioConsultar.setDireccion(nuevaDireccion);
-        }
-        if (nuevoId != null && nuevoId.matches("\\d+")) {
-            usuarioConsultar.setId(nuevoId);
-        }
-        if (nuevoCorreo != null && nuevoCorreo.contains("@")) {
-            usuarioConsultar.setCorreo(nuevoCorreo);
-        }
-        if (nuevaContrasena != null && nuevaContrasena.length() >= 6) {
-            usuarioConsultar.setContrasena(nuevaContrasena);
-        }
-    }
-
-    public void elimUsuario(String idEliminar) throws Exception {
-        Usuario usuarioEliminar = null;
-        for(Usuario usuario: usuarios){
-            if(usuario.getId().equals(idEliminar)){
-                usuarioEliminar = usuario;
-            }
-        }
-        usuarios.remove(usuarioEliminar);
-    }
 
 
 }

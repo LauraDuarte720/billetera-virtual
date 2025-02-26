@@ -6,13 +6,14 @@ import java.util.Random;
 
 public class Billetera {
 
-    //INSTANCIAS NECESARIAS
+    //ATRIBUTOS
     private String numTarjeta;
     private double saldo;
     private Usuario propietario;
     private ArrayList<Transaccion> transacciones;
     public static  final float COSTO = 200;
 
+    //SCANNER PARA EL CASO DE QUE HUBIERA APP
     Scanner scanner = new Scanner(System.in);
     String negrita = "\u001B[1m";
     String reset = "\u001B[0m";
@@ -23,8 +24,8 @@ public class Billetera {
 
 
     //CONSTRUCTOR
-    public Billetera(String numTarjeta, double saldo, Usuario propietario) {
-        this.numTarjeta = numTarjeta;
+    public Billetera( double saldo, Usuario propietario) {
+        this.numTarjeta = crearNumeroUnicoBilletera();
         this.saldo = saldo;
         this.propietario = propietario;
         this.transacciones = new ArrayList<>();
@@ -63,11 +64,7 @@ public class Billetera {
         this.propietario = propietario;
     }
 
-
-    public ArrayList<Transaccion> consultarTransacciones() {
-        return transacciones;
-    }
-
+    //METODO PARA REALIZAR UNA TRANSACCION
     public Transaccion realizarTransaccion(float saldoTransferir, CATEGORIA categoria,Billetera origen,  Billetera destino) throws Exception{
 
         Transaccion transaccion=new Transaccion(LocalDateTime.now(), categoria,destino, origen, saldoTransferir);
@@ -80,20 +77,24 @@ public class Billetera {
         return transaccion;
     }
 
+    //METODO PARA AGREGAR UNA TRANSACCION A LA LISTA
     public void agregarTransaccion(Transaccion transaccion){
         transacciones.add(transaccion);
     }
 
+    //METODO PARA SUMAR MONTO A LA BILLETERA DESTINO
     public void sumarMonto(double saldoTransferencia, Billetera billetera){
         double nuevoSaldoDestino= saldoTransferencia+ billetera.getSaldo();
         billetera.setSaldo( nuevoSaldoDestino);
     }
 
+    //METODO PARA RESTAR SALDO A LA BILLETERA ORIGEN
     public void restarSaldo(double saldoTransferencia, Billetera billetera){
         double nuevoSaldoOrigen=billetera.getSaldo() - saldoTransferencia-COSTO;
         billetera.setSaldo(nuevoSaldoOrigen);
     }
 
+    //METODO PARA RECARGAR BILLETERA
     public void recargarBilletera(double saldoARecargar) throws Exception{
         boolean recargaValida = false;
         while(!recargaValida){
@@ -129,32 +130,7 @@ public class Billetera {
         return listaTransacciones;
     }
 
-    //METODO PARA OBTENER EL PORCENTAJE DE GASTOS
-    public double porcentajeGastos(LocalDateTime fechaInicio, LocalDateTime fechaFinal, CATEGORIA categoria) throws Exception {
-        double gastosTotales = 0;
-        double montoTotal = 0;
-        for (Transaccion transaccion : transacciones) {
-            if (transaccion.getFecha().isAfter(fechaInicio) && transaccion.getFecha().isBefore(fechaFinal) && transaccion.getCategoria().equals(categoria)){
-                gastosTotales += (transaccion.getMonto());
-            }
-            montoTotal += transaccion.getMonto();
-        }
-        return Math.round((gastosTotales / montoTotal) * 100 * 1.0) / 1.0;
-    }
-
-
-    //METODO PARA OBTENER EL PORCENTAJE DE INGRESOS
-    public double calcularPorcentajeIngresos(Billetera billetera, LocalDateTime fechaInicio, LocalDateTime fechaFinal, Banco banco, CATEGORIA categoria) throws Exception{
-        double ingresosTotales = 0;
-        ArrayList<Transaccion> transacciones = banco.getTransacciones();
-        for(Transaccion transaccion : transacciones) {
-            if(transaccion.getDestinatario().equals(billetera) && transaccion.getCategoria().equals(categoria) && transaccion.getFecha().isAfter(fechaInicio) && transaccion.getFecha().isBefore(fechaFinal)){
-                ingresosTotales+= transaccion.getMonto();
-            }
-        }
-        return (ingresosTotales/ billetera.getSaldo()) * 100;
-    }
-
+    //METODO PARA CONSULTAR PORCENTAJE GASTOS-INGRESOS SEGUN UN PERIODO DE TIEMPO
     public double calcularPorcentajeGastosIngresosTotales(LocalDateTime fechaInicio, LocalDateTime fechaFinal, boolean gastos) throws Exception {
 
         if(fechaInicio.isAfter(fechaFinal)){
@@ -180,9 +156,9 @@ public class Billetera {
         }
         return (ingresosTotales/total)*100;
 
-
     }
 
+    //METODO PARA CONSULTAR PORCENTAJE GASTOS-INGRESOS SEGUN UN PERIODO DE TIEMPO Y CATEGORIA
     public double calcularPorcentajeGastosIngresosCategoria (LocalDateTime fechaInicio, LocalDateTime fechaFinal, CATEGORIA categoria,boolean gastos) throws Exception{
 
         if(fechaInicio.isAfter(fechaFinal)){
@@ -211,6 +187,7 @@ public class Billetera {
 
     }
 
+    //METODO PARA OBTENER TRANSACCIONES FILTRADAS SEGUN UN PERIODO DE TIEMPO
     public ArrayList<Transaccion> obtenerTransaccionesFiltradas(LocalDateTime fechaInicio, LocalDateTime fechaFinal){
         ArrayList<Transaccion> transaccionesFilatradas = new ArrayList<>();
         for(Transaccion transaccion : transacciones) {
@@ -221,6 +198,7 @@ public class Billetera {
         return transaccionesFilatradas;
     }
 
+    //METODO PARA OBTENER TRANSACCIONES FILTRADAS SEGUN UN PERIODO DE TIEMPO Y CATEGORIA
     public ArrayList<Transaccion> obtenerTransaccionesFiltradasCategoria(LocalDateTime fechaInicio, LocalDateTime fechaFinal, CATEGORIA categoria){
         ArrayList<Transaccion> transaccionesFiltradas = obtenerTransaccionesFiltradas(fechaInicio, fechaFinal);
         ArrayList<Transaccion> transaccionesCategorias = new ArrayList<>();
@@ -231,6 +209,19 @@ public class Billetera {
         }
         return transaccionesCategorias;
     }
+
+    //METODO PARA CREAR UN NUMERO UNICO DE BILLETERA
+    public String crearNumeroUnicoBilletera() {
+
+        StringBuilder sb = new StringBuilder();
+        Random random = new Random();
+        for (int i = 0; i < 10; i++) {
+            sb.append(random.nextInt(10));
+        }
+
+        return sb.toString();
+    }
+
 }
 
 
