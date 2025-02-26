@@ -100,4 +100,71 @@ public class BancoTest {
 
         });
     }
+
+
+    @Test
+    public void testCrearBilleteraExitoso() throws Exception {
+        Banco banco = new Banco("TestBank");
+
+        banco.regUsuario("Juan Perez", "Calle 123", "12345",
+                "juan@test.com", "password123");
+
+        Billetera billetera = banco.crearBilletera("12345", "Juan Perez");
+
+        assertEquals("Juan Perez", billetera.getPropietario().getNombre());
+        assertEquals(0.0, billetera.getSaldo());
+        assertEquals(10, billetera.getNumTarjeta().length());
+        assertTrue(billetera.getNumTarjeta().matches("\\d{10}"));
+        assertEquals(1, banco.getBilleteras().size());
+    }
+
+    @Test
+    public void testNumerosTarjetaUnicos() throws Exception {
+        Banco banco = new Banco("Banco123");
+
+        banco.regUsuario("Juan Perez", "Calle 123", "12345",
+                "juan@test.com", "password123");
+        int numeroBilleteras = 10; // Testing with 10 wallets (adjustable)
+        Billetera[] billeteras = new Billetera[numeroBilleteras];
+
+        for (int i = 0; i < numeroBilleteras; i++) {
+            billeteras[i] = banco.crearBilletera("12345", "Juan Perez");
+
+            assertEquals(10, billeteras[i].getNumTarjeta().length());
+            assertTrue(billeteras[i].getNumTarjeta().matches("\\d{10}"));
+        }
+
+        for (int i = 0; i < numeroBilleteras; i++) {
+            String numeroActual = billeteras[i].getNumTarjeta();
+            for (int j = 0; j < numeroBilleteras; j++) {
+                if (i != j) {
+                    String numeroComparar = billeteras[j].getNumTarjeta();
+                    if (numeroActual.equals(numeroComparar)) {
+                        fail("Se encontró un número de tarjeta duplicado: " + numeroActual +
+                                " en las posiciones " + i + " y " + j);
+                    }
+                }
+            }
+        }
+
+        assertEquals(numeroBilleteras, banco.getBilleteras().size());
+
+        for (int i = 0; i < banco.getBilleteras().size(); i++) {
+            String numeroActual = banco.getBilleteras().get(i).getNumTarjeta();
+            for (int j = 0; j < banco.getBilleteras().size(); j++) {
+                if (i != j) {
+                    String numeroComparar = banco.getBilleteras().get(j).getNumTarjeta();
+                    if (numeroActual.equals(numeroComparar)) {
+                        fail("Se encontró un duplicado en la lista del banco: " + numeroActual +
+                                " en las posiciones " + i + " y " + j);
+                    }
+                }
+            }
+        }
+
+    }
+
+
+
+
 }

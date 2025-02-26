@@ -188,6 +188,32 @@ public class Banco {
 
     //METOD PARA CREAR LA BILLETERA
 
+        public Billetera crearBilletera(String idPropietario, String nombrePropietario) throws Exception {
+            if (idPropietario == null || idPropietario.trim().isEmpty()) {
+                throw new Exception("El ID del propietario no puede estar vacío");
+            }
+            if (nombrePropietario == null || nombrePropietario.trim().isEmpty()) {
+                throw new Exception("El nombre del propietario no puede estar vacío");
+            }
+
+            Usuario propietarioEncontrado = null;
+            for (Usuario usuario : usuarios) {
+                if (usuario.getNombre().equalsIgnoreCase(nombrePropietario) &&
+                        usuario.getId().equals(idPropietario)) {
+                    propietarioEncontrado = usuario;
+                    break;
+                }
+            }
+            if (propietarioEncontrado == null) {
+                throw new Exception("Usuario/ID no encontrado en nuestra base de datos");
+            }
+            Billetera billeteraNueva = new Billetera(0, propietarioEncontrado);
+            String numeroUnico = billeteraNueva.crearNumeroUnicoBilletera();
+            billeteraNueva.setNumTarjeta(numeroUnico);
+            billeteras.add(billeteraNueva);
+            return billeteraNueva;
+        }
+
 
 
     //METODOS PARA LA OPTIMIZACION DEL CODIGO (SI SE HACEN CON APP)
