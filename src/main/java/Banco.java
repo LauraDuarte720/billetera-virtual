@@ -8,7 +8,6 @@ public class Banco {
     //ATRIBUTOS
     private String nombre;
     private ArrayList<Usuario> usuarios;
-    private ArrayList<Transaccion> transacciones;
     private ArrayList<Billetera> billeteras;
 
     //SCANNER PARA EL APP
@@ -26,7 +25,6 @@ public class Banco {
         this.usuarios = new ArrayList<>();
         this.nombre = nombre;
         this.billeteras = new ArrayList<>();
-        this.transacciones = new ArrayList<>();
     }
 
     //GETTERS Y SETTERS
@@ -44,14 +42,6 @@ public class Banco {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
-    }
-
-    public ArrayList<Transaccion> getTransacciones() {
-        return transacciones;
-    }
-
-    public void setTransacciones(ArrayList<Transaccion> transacciones) {
-        this.transacciones = transacciones;
     }
 
     public ArrayList<Billetera> getBilleteras() {
@@ -158,7 +148,7 @@ public class Banco {
     }
 
 
-    //METODOS PARA AGREGAR LAS BILLETERAS, USUARIOS, TRANSACCIONES
+    //METODOS PARA AGREGAR LAS BILLETERAS, USUARIOS
     public void agregarBilleteraABanco(Billetera billetera) {
         billeteras.add(billetera);
     }
@@ -167,9 +157,6 @@ public class Banco {
         usuarios.add(usuario);
     }
 
-    public void agregarTransaccionABanco(Transaccion transaccion) {
-        transacciones.add(transaccion);
-    }
 
     //METODO PARA CONSULTAR SALDO Y TRANSACCIONES
     public SaldoTransacciones consultarSaldo(String cedula, String contrasena) throws Exception {
