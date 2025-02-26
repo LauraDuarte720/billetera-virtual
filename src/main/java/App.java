@@ -60,7 +60,7 @@ public class App {
                             break;
 
                         case 4:
-                            banco.crearBilletera();
+                            //banco.crearBilletera();
                             break;
 
                         case 5:

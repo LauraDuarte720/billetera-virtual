@@ -21,7 +21,7 @@ public class BilleteraTest {
 
 
         assertDoesNotThrow(()->{
-            Transaccion transaccionRealizada=billetera1.realizarTransaccion(banco,300,CATEGORIA.VIAJES,billetera1,billetera2);
+            Transaccion transaccionRealizada=billetera1.realizarTransaccion(300,CATEGORIA.VIAJES,billetera1,billetera2);
 
             Transaccion transaccionPrueba = new Transaccion(
                     transaccionRealizada.getFecha(),  // Usamos la misma fecha de la transacción real
@@ -57,7 +57,7 @@ public class BilleteraTest {
         banco.agregarBilleteraABanco(billetera3);
 
         assertDoesNotThrow(()->{
-        Transaccion transaccionRealizada=billetera1.realizarTransaccion(banco,3000,CATEGORIA.VIAJES,billetera1,billetera2);
+        Transaccion transaccionRealizada=billetera1.realizarTransaccion(3000,CATEGORIA.VIAJES,billetera1,billetera2);
 
         });
 
@@ -91,7 +91,7 @@ public class BilleteraTest {
         banco.agregarBilleteraABanco(billetera3);
 
         assertDoesNotThrow(()->{
-            Transaccion transaccionRealizada=billetera1.realizarTransaccion(banco,300,CATEGORIA.VIAJES,billetera1,billetera2);
+            Transaccion transaccionRealizada=billetera1.realizarTransaccion(300,CATEGORIA.VIAJES,billetera1,billetera2);
             assertEquals(billetera1.consultarTransaccionesTiempo(LocalDateTime.of(2025,1,24,12,0,0), LocalDateTime.of(2025,3,24,12,0,0)).size(), 1);
         });
     }
@@ -110,10 +110,10 @@ public class BilleteraTest {
 
 
         assertDoesNotThrow(()->{
-            billetera1.realizarTransaccion(banco,500, CATEGORIA.ROPA, billetera1, billetera2);
-            billetera1.realizarTransaccion(banco,1000, CATEGORIA.ROPA, billetera1, billetera3);
+            billetera1.realizarTransaccion(500, CATEGORIA.ROPA, billetera1, billetera2);
+            billetera1.realizarTransaccion(1000, CATEGORIA.ROPA, billetera1, billetera3);
             double porcentajeEsperado = ((1900.0/5000.0)*100.0);
-            assertEquals(porcentajeEsperado, billetera1.porcentajeGastos(billetera1, LocalDateTime.of(2025,1,1,12,12,12), LocalDateTime.of(2025,4,1,12,12,12), CATEGORIA.ROPA));
+            assertEquals(porcentajeEsperado, billetera1.porcentajeGastos(LocalDateTime.of(2025,1,1,12,12,12), LocalDateTime.of(2025,4,1,12,12,12), CATEGORIA.ROPA));
         });
 
     }

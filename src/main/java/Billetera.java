@@ -11,7 +11,7 @@ public class Billetera {
     private double saldo;
     private Usuario propietario;
     private ArrayList<Transaccion> transacciones;
-    private static  final float COSTO = 200;
+    public static  final float COSTO = 200;
 
     Scanner scanner = new Scanner(System.in);
     String negrita = "\u001B[1m";
@@ -68,32 +68,7 @@ public class Billetera {
         return transacciones;
     }
 
-    public Transaccion realizarTransaccion(Banco banco,float saldoTransferir, CATEGORIA categoria,Billetera origen,  Billetera destino) throws Exception{
-
-        ArrayList<Billetera>billeteras=banco.getBilleteras();
-        boolean origenValido=false;
-        boolean destinoValido=false;
-        boolean transaccionValida=false;
-        if (saldoTransferir+COSTO>saldo){
-            throw  new Exception("No hay saldo suficiente en la billetera ");
-        }else if(saldoTransferir<=0) {
-            throw new Exception("No se permite transferir un saldo menor a cero");
-        }
-        while (!transaccionValida){
-            for (Billetera billetera: billeteras){
-                if( billetera.getNumTarjeta().equals(origen.getNumTarjeta())){
-                    origenValido=true;
-                }else if (billetera.getNumTarjeta().equals(destino.getNumTarjeta())){
-                    destinoValido=true;
-                }
-            }
-            if (origenValido && destinoValido) {
-                transaccionValida = true;
-            }else {
-                throw new Exception("La billetera destino o billetera origen no estan registradas en el banco");
-            }
-        }
-
+    public Transaccion realizarTransaccion(float saldoTransferir, CATEGORIA categoria,Billetera origen,  Billetera destino) throws Exception{
 
         Transaccion transaccion=new Transaccion(LocalDateTime.now(), categoria,destino, origen, saldoTransferir);
 
@@ -155,14 +130,16 @@ public class Billetera {
     }
 
     //METODO PARA OBTENER EL PORCENTAJE DE GASTOS
-    public double porcentajeGastos(Billetera billetera, LocalDateTime fechaInicio, LocalDateTime fechaFinal, CATEGORIA categoria) throws Exception {
+    public double porcentajeGastos(LocalDateTime fechaInicio, LocalDateTime fechaFinal, CATEGORIA categoria) throws Exception {
         double gastosTotales = 0;
+        double montoTotal = 0;
         for (Transaccion transaccion : transacciones) {
             if (transaccion.getFecha().isAfter(fechaInicio) && transaccion.getFecha().isBefore(fechaFinal) && transaccion.getCategoria().equals(categoria)){
                 gastosTotales += (transaccion.getMonto());
             }
+            montoTotal += transaccion.getMonto();
         }
-        return Math.round((gastosTotales / billetera.getSaldo()) * 100 * 1.0) / 1.0;
+        return Math.round((gastosTotales / montoTotal) * 100 * 1.0) / 1.0;
     }
 
 

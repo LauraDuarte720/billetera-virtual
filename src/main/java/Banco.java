@@ -60,8 +60,40 @@ public class Banco {
         this.billeteras = billeteras;
     }
 
+    public Transaccion realizarTransaccion(float saldoTransferir, CATEGORIA categoria,String numBilleteraOrigen, String numBilleteraDestino) throws Exception{
+        boolean origenValido=false;
+        boolean destinoValido=false;
+        boolean transaccionValida=false;
+        Billetera billeteraOrigen = null;
+        Billetera billeteraDestino = null;
 
-    //METODOS PARA LA OPTIMIZACION DEL CODIGO
+        while (!transaccionValida){
+            for (Billetera billetera: billeteras){
+                if( billetera.getNumTarjeta().equals(numBilleteraOrigen)){
+                    origenValido=true;
+                    billeteraOrigen = billetera;
+                }else if (billetera.getNumTarjeta().equals(numBilleteraDestino)){
+                    destinoValido=true;
+                    billeteraDestino = billetera;
+                }
+            }
+            if (origenValido && destinoValido) {
+                transaccionValida = true;
+            }else {
+                throw new Exception("La billetera destino o billetera origen no estan registradas en el banco");
+            }
+        }
+
+        if (saldoTransferir+Billetera.COSTO>billeteraOrigen.getSaldo()){
+            throw  new Exception("No hay saldo suficiente en la billetera ");
+        }else if(saldoTransferir<=0) {
+            throw new Exception("No se permite transferir un saldo menor a cero");
+        }
+
+        return billeteraOrigen.realizarTransaccion(saldoTransferir, categoria, billeteraOrigen, billeteraDestino );
+    }
+
+        //METODOS PARA LA OPTIMIZACION DEL CODIGO
     public static String leerTextoValido(Scanner scanner, String mensaje) throws Exception {
         String texto;
         String reset = "\u001B[0m";
@@ -208,10 +240,9 @@ public class Banco {
 
 
     //METODO crearBilletera
-    public void crearBilletera() throws Exception {
+    public void crearBilletera(String idPropietario) throws Exception {
         Billetera billeteraNueva = new Billetera("", 0, null);
         String propietarioNuevo = Banco.leerTextoValido(scanner, azul + negrita + "Ingrese su nombre: " + reset);
-        String idPropietario = Banco.leerTextoValido(scanner, azul + negrita + "Ingrese su id: " + reset);
         StringBuilder propietarioAsignado = new StringBuilder();
         for (Usuario usuario : usuarios) {
             if (usuario.getNombre().equalsIgnoreCase(propietarioNuevo) && usuario.getId().equals(idPropietario)) {
@@ -251,8 +282,8 @@ public class Banco {
         transacciones.add(transaccion);
     }
 
-    public ArrayList<String> consultarSaldo(String cedula, String contrasena) throws Exception {
-        ArrayList<String> saldoTransacciones = new ArrayList<>();
+    public SaldoTransacciones consultarSaldo(String cedula, String contrasena) throws Exception {
+        SaldoTransacciones saldoTransacciones = new SaldoTransacciones();
         Usuario usuarioConsultar = null;
 
         for (Usuario usuario : usuarios) {
@@ -270,13 +301,9 @@ public class Banco {
         for (Billetera billetera : billeteras) {
             if (billetera.getPropietario().equals(usuarioConsultar)) {
                 tieneBilletera = true;
-                saldoTransacciones.add(billetera.getTransacciones().toString());
-                saldoTransacciones.add(String.valueOf(billetera.getSaldo()));
+                saldoTransacciones.setTransaccions(billetera.getTransacciones());
+                saldoTransacciones.setSaldo(billetera.getSaldo());
             }
-        }
-
-        if (!tieneBilletera) {
-            saldoTransacciones.add("El usuario no tiene billetera asociada.");
         }
 
         return saldoTransacciones;
@@ -304,35 +331,42 @@ public class Banco {
             usuarios.add(new Usuario(nombre, direccion, id, correo, contrasena));
         }
 
-    public void actUsuario(int indice, String nuevoNombre, String nuevaDireccion, String nuevoId, String nuevoCorreo, String nuevaContrasena) throws Exception {
-        if (indice < 0 || indice >= usuarios.size()) {
-            throw new Exception("Índice de usuario inválido.");
+    public void actUsuario(String idViejo, String nuevoNombre, String nuevaDireccion, String nuevoId, String nuevoCorreo, String nuevaContrasena) throws Exception {
+        boolean actUsuarioValido = false;
+        Usuario usuarioConsultar= null;
+        while(!actUsuarioValido) {
+            for(Usuario usuario:usuarios){
+                if(usuario.getId().equals(idViejo)){
+                    actUsuarioValido = true;
+                    usuarioConsultar= usuario;
+
+                } else{
+                    throw new Exception("El usuario no existe");
+                }
+            }
         }
-
-        Usuario usuario = usuarios.get(indice);
-
         if (nuevoNombre != null && !nuevoNombre.trim().isEmpty()) {
-            usuario.setNombre(nuevoNombre);
+            usuarioConsultar.setNombre(nuevoNombre);
         }
         if (nuevaDireccion != null && !nuevaDireccion.trim().isEmpty()) {
-            usuario.setDireccion(nuevaDireccion);
+            usuarioConsultar.setDireccion(nuevaDireccion);
         }
         if (nuevoId != null && nuevoId.matches("\\d+")) {
-            usuario.setId(nuevoId);
+            usuarioConsultar.setId(nuevoId);
         }
         if (nuevoCorreo != null && nuevoCorreo.contains("@")) {
-            usuario.setCorreo(nuevoCorreo);
+            usuarioConsultar.setCorreo(nuevoCorreo);
         }
         if (nuevaContrasena != null && nuevaContrasena.length() >= 6) {
-            usuario.setContrasena(nuevaContrasena);
+            usuarioConsultar.setContrasena(nuevaContrasena);
         }
     }
 
     public void elimUsuario(int indice) throws Exception {
-        if (indice < 0 || indice >= usuarios.size()) {
-            throw new Exception("Índice de usuario inválido.");
+        Usuario usuarioEliminar = null;
+        for(Usuario usuario: usuarios){
+            
         }
-
         usuarios.remove(indice);
     }
 }

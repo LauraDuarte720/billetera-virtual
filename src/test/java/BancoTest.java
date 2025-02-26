@@ -42,7 +42,8 @@ public class BancoTest {
             billetera1.agregarTransaccion(transaccion3);
 
             assertDoesNotThrow(()->{
-                ArrayList<String> listaSaldoTransacciones=banco.consultarSaldo("1001","123");
+                SaldoTransacciones saldoTransacciones = banco.consultarSaldo("1001","123");
+                assertEquals(3, saldoTransacciones.getTransaccions().size());
 
             });
         }
