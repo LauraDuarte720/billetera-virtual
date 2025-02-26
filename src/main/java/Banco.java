@@ -24,7 +24,7 @@ public class Banco {
         this.usuarios = new ArrayList<>();
         this.nombre = nombre;
         this.billeteras = new ArrayList<>();
-        this.transacciones= new ArrayList<>();
+        this.transacciones = new ArrayList<>();
     }
 
     //GETTERS Y SETTERS
@@ -240,11 +240,11 @@ public class Banco {
 
     //METODO PARA AGREGAR LAS BILLETERAS
     public void agregarBilleteraABanco(Billetera billetera) {
-            billeteras.add(billetera);
+        billeteras.add(billetera);
     }
 
     public void agregarUsuarioABanco(Usuario usuario) {
-            usuarios.add(usuario);
+        usuarios.add(usuario);
     }
 
     public void agregarTransaccionABanco(Transaccion transaccion) {
@@ -282,4 +282,57 @@ public class Banco {
         return saldoTransacciones;
     }
 
+
+    //VERSIONES NO INTERACTIVAS PARA LOS METODOS DE ELIMINAR,ACTUALIZAR,REGISTRAR USUARIO
+        public void regUsuario(String nombre, String direccion, String id, String correo, String contrasena) throws Exception {
+            if (nombre == null || nombre.trim().isEmpty()) {
+                throw new Exception("El nombre no puede estar vacío.");
+            }
+            if (direccion == null || direccion.trim().isEmpty()) {
+                throw new Exception("La dirección no puede estar vacía.");
+            }
+            if (id == null || !id.matches("\\d+")) {
+                throw new Exception("El ID debe ser un número válido.");
+            }
+            if (correo == null || !correo.contains("@")) {
+                throw new Exception("El correo electrónico no es válido.");
+            }
+            if (contrasena == null || contrasena.length() < 6) {
+                throw new Exception("La contraseña debe tener al menos 6 caracteres.");
+            }
+
+            usuarios.add(new Usuario(nombre, direccion, id, correo, contrasena));
+        }
+
+    public void actUsuario(int indice, String nuevoNombre, String nuevaDireccion, String nuevoId, String nuevoCorreo, String nuevaContrasena) throws Exception {
+        if (indice < 0 || indice >= usuarios.size()) {
+            throw new Exception("Índice de usuario inválido.");
+        }
+
+        Usuario usuario = usuarios.get(indice);
+
+        if (nuevoNombre != null && !nuevoNombre.trim().isEmpty()) {
+            usuario.setNombre(nuevoNombre);
+        }
+        if (nuevaDireccion != null && !nuevaDireccion.trim().isEmpty()) {
+            usuario.setDireccion(nuevaDireccion);
+        }
+        if (nuevoId != null && nuevoId.matches("\\d+")) {
+            usuario.setId(nuevoId);
+        }
+        if (nuevoCorreo != null && nuevoCorreo.contains("@")) {
+            usuario.setCorreo(nuevoCorreo);
+        }
+        if (nuevaContrasena != null && nuevaContrasena.length() >= 6) {
+            usuario.setContrasena(nuevaContrasena);
+        }
+    }
+
+    public void elimUsuario(int indice) throws Exception {
+        if (indice < 0 || indice >= usuarios.size()) {
+            throw new Exception("Índice de usuario inválido.");
+        }
+
+        usuarios.remove(indice);
+    }
 }
