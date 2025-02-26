@@ -362,11 +362,15 @@ public class Banco {
         }
     }
 
-    public void elimUsuario(int indice) throws Exception {
+    public void elimUsuario(String idEliminar) throws Exception {
         Usuario usuarioEliminar = null;
         for(Usuario usuario: usuarios){
-            
+            if(usuario.getId().equals(idEliminar)){
+                usuarioEliminar = usuario;
+            }
         }
-        usuarios.remove(indice);
+        usuarios.remove(usuarioEliminar);
     }
+
+
 }

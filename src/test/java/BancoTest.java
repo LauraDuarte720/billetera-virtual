@@ -80,9 +80,10 @@ public class BancoTest {
         void testActualizarUsuarioExitoso() throws Exception {
             Banco banco = new Banco("Banco123");
             banco.regUsuario("pacho", "Carrera 12", "55555", "pacho@mail.com", "asdasds");
-            banco.actUsuario(0, "pachito", "Calle 99", "66666", "pedro@newmail.com", "nuevaClave");
+            banco.actUsuario("55555", "pachito", "Calle 99", "66666", "pedro@newmail.com", "nuevaClave");
 
-            Usuario usuario = banco.getUsuarios().get(0);
+            
+
             assertEquals("pachito", usuario.getNombre());
             assertEquals("Calle 99", usuario.getDireccion());
             assertEquals("66666", usuario.getId());
@@ -96,7 +97,7 @@ public class BancoTest {
         void testEliminarUsuarioExitoso() throws Exception {
             Banco banco = new Banco("Banco123");
             banco.regUsuario("pacho123", "Calle 50", "98765", "pacho@gmail.com", "superclave");
-            banco.elimUsuario(0);
+            banco.elimUsuario("98765");
             assertEquals(0, banco.getUsuarios().size());
         }
 }
