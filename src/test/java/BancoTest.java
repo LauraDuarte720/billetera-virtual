@@ -104,7 +104,7 @@ public class BancoTest {
 
     @Test
     public void testCrearBilleteraExitoso() throws Exception {
-        Banco banco = new Banco("TestBank");
+        Banco banco = new Banco("Banco123");
 
         banco.regUsuario("Juan Perez", "Calle 123", "12345",
                 "juan@test.com", "password123");

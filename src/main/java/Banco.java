@@ -207,8 +207,27 @@ public class Banco {
             if (propietarioEncontrado == null) {
                 throw new Exception("Usuario/ID no encontrado en nuestra base de datos");
             }
+
             Billetera billeteraNueva = new Billetera(0, propietarioEncontrado);
-            String numeroUnico = billeteraNueva.crearNumeroUnicoBilletera();
+            String numeroUnico;
+            boolean numeroDuplicado;
+
+            do {
+                numeroUnico = billeteraNueva.crearNumeroUnicoBilletera();
+                numeroDuplicado = false;
+
+                for (Billetera billetera : billeteras) {
+                    if (billetera.getNumTarjeta().equals(numeroUnico)) {
+                        numeroDuplicado = true;
+                        break;
+                    }
+                }
+
+                if (numeroDuplicado) {
+                    throw new Exception("Se generó un número de tarjeta duplicado. Intentando generar uno nuevo...");
+                }
+            } while (numeroDuplicado);
+
             billeteraNueva.setNumTarjeta(numeroUnico);
             billeteras.add(billeteraNueva);
             return billeteraNueva;
